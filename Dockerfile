@@ -19,7 +19,7 @@ RUN mkdir -p /opt/jruby/etc \
 		echo 'update: --no-document'; \
 	} >> /opt/jruby/etc/gemrc
 
-RUN gem install bundler
+RUN gem install --version "< 1.16" bundler
 
 # install things globally, for great justice
 # and don't create ".bundle" in all our apps

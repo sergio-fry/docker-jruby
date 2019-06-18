@@ -1,11 +1,11 @@
-FROM openjdk:8-jdk
+FROM openjdk:8-jre
 
 RUN apt-get update && apt-get install -y libc6-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-ENV JRUBY_VERSION 9.1.13.0
-ENV JRUBY_SHA256 9d156646623ac2f27174721035b52572a4b05690db7c1293295aa2c04aad3908
+ENV JRUBY_VERSION 9.2.7.0
+ENV JRUBY_SHA256 da7c1a5ce90015c0bafd4bca0352294e08fe1c9ec049ac51e82fe57ed50e1348
 RUN mkdir /opt/jruby \
-  && curl -fSL https://s3.amazonaws.com/jruby.org/downloads/${JRUBY_VERSION}/jruby-bin-${JRUBY_VERSION}.tar.gz -o /tmp/jruby.tar.gz \
+  && curl -fSL https://repo1.maven.org/maven2/org/jruby/jruby-dist/${JRUBY_VERSION}/jruby-dist-${JRUBY_VERSION}-bin.tar.gz -o /tmp/jruby.tar.gz \
   && echo "$JRUBY_SHA256 /tmp/jruby.tar.gz" | sha256sum -c - \
   && tar -zx --strip-components=1 -f /tmp/jruby.tar.gz -C /opt/jruby \
   && rm /tmp/jruby.tar.gz \
@@ -20,6 +20,7 @@ RUN mkdir -p /opt/jruby/etc \
 	} >> /opt/jruby/etc/gemrc
 
 RUN gem install --version "< 1.16" bundler
+RUN gem install rake net-telnet xmlrpc
 
 # install things globally, for great justice
 # and don't create ".bundle" in all our apps
